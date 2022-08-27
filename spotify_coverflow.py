@@ -1,6 +1,8 @@
+import coverpy
 import itunespy
 import spotipy
 import spotipy.util as util
+import requests
 from credentials import USERNAME, SECRET, SCOPE, URI, ID
 
 def get_token():
@@ -41,27 +43,39 @@ def get_current_playing(token):
     }
 
 
-def itunes_search(song, artist):
+def itunes_search(song, artist, album):
     '''
     Check if iTunes has a higher definition album cover and
     return the url if found
     '''
 
+    # try itunespy with track
     try:
         matches = itunespy.search_track(song)
     except LookupError:
-        return None
+        pass
 
     for match in matches:
         if match.artist_name == artist:
-            return match.artwork_url_100.replace('100x100b', '5000x5000b')
+            return match.artwork_url_100.replace('100x100b', '10000x10000b')
+
+    # try coverpy with album + artist
+    c = coverpy.CoverPy()
+    try:
+        result = c.get_cover(album + " " + artist, 1)
+    except (coverpy.exceptions.NoResultsException, requests.exceptions.HTTPError):
+        return None
+
+    return result.artwork(10000)
+
+
 
 def get_img(token):
     current_song = get_current_playing(token)
     if current_song is None:
         return None
     hd_img = itunes_search(
-        current_song["name"], current_song["artist"])
+        current_song["name"], current_song["artist"], current_song["album"])
 
     if hd_img != None:
         return hd_img
