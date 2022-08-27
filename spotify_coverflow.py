@@ -23,6 +23,8 @@ def get_current_playing(token):
 
     spotify = spotipy.Spotify(auth=token)
     results = spotify.current_user_playing_track()
+    if results is None:
+        return None
 
     img_src = results["item"]["album"]["images"][0]["url"]
     artist = results["item"]["album"]["artists"][0]["name"]
@@ -56,6 +58,8 @@ def itunes_search(song, artist):
 
 def get_img(token):
     current_song = get_current_playing(token)
+    if current_song is None:
+        return None
     hd_img = itunes_search(
         current_song["name"], current_song["artist"])
 
