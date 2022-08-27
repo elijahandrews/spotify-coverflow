@@ -1,13 +1,7 @@
 import itunespy
 import spotipy
 import spotipy.util as util
-
-USERNAME = ""
-SECRET = ""
-SCOPE = "user-read-currently-playing"
-URI = "http://localhost:8888/callback"
-ID = ""
-
+from credentials import USERNAME, SECRET, SCOPE, URI, ID
 
 def get_token():
     '''
@@ -72,4 +66,3 @@ def get_img(token):
 
 if __name__ == "__main__":
     token = get_token()
-    main(token)
