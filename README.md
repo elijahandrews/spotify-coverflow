@@ -1,11 +1,10 @@
 # SpotifyCoverFlow
 
-[![PyPI](https://img.shields.io/badge/Python-3.7-green.svg)]()
+My fork of github.com/kylesurowiec/spotify-coverflow, thanks for the base!
 
-Keys and callback URI are given with your personal Spotify developer account, register here: [Spotify Developer](https://developer.spotify.com/my-applications/#!/).
+This serves high resolution artwork for your currently playing spotify song via
+http. The idea is that you run this server somewhere on your local network, and
+then access the artwork from any laptop/tablet/phone. I use this to see nice
+artwork on my iPad when I'm sitting on the couch listening to music.
 
-SpotifyCoverFlow is a simple script to display a full-screen & high resolution image of your current playing (or most recent) song on Spotify. The intended use is to dedicate a RaspberryPi (or similar device) and a monitor/screen to be an always on digital poster for your favorite music artwork.
-
-![Example](http://i.imgur.com/ruRSCt3.png)
-
-At the time of writing this script, Spotify only supports image artwork up to `640x640`. To counteract this - the current song is then searched through iTunes to grab artwork up to `10000x10000`. If the artwork can't be found on iTunes, the lower resolution Spotify artwork will be displayed.
+Keys and callback URI are given with your personal Spotify developer account, register here: [Spotify Developer](https://developer.spotify.com/my-applications/#!/). They go in credentials.py
