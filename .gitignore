@@ -106,3 +106,5 @@ ENV/
 
 .cache*
 credentials.py
+
+*.swp
