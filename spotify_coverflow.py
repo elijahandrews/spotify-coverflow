@@ -49,25 +49,25 @@ def itunes_search(song, artist, album):
     return the url if found
     '''
 
+    # try coverpy with track + album + artist
+    c = coverpy.CoverPy()
+    try:
+        query = song + " " + album + " " + artist
+        result = c.get_cover(query, 10)
+        return result.artwork(10000)
+    except (coverpy.exceptions.NoResultsException, requests.exceptions.HTTPError):
+        pass
+
     # try itunespy with track
     try:
         matches = itunespy.search_track(song)
     except LookupError:
-        pass
-
+        return None
     for match in matches:
         if match.artist_name == artist:
             return match.artwork_url_100.replace('100x100b', '10000x10000b')
 
-    # try coverpy with album + artist
-    c = coverpy.CoverPy()
-    try:
-        query = album + " " + artist
-        result = c.get_cover(query, 10)
-    except (coverpy.exceptions.NoResultsException, requests.exceptions.HTTPError):
-        return None
-
-    return result.artwork(10000)
+    return None
 
 
 
