@@ -62,7 +62,8 @@ def itunes_search(song, artist, album):
     # try coverpy with album + artist
     c = coverpy.CoverPy()
     try:
-        result = c.get_cover(album + " " + artist, 1)
+        query = album + " " + artist
+        result = c.get_cover(query, 10)
     except (coverpy.exceptions.NoResultsException, requests.exceptions.HTTPError):
         return None
 
