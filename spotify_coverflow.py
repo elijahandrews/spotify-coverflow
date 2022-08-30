@@ -1,4 +1,5 @@
 import coverpy
+import deezer
 import itunespy
 import spotipy
 import spotipy.util as util
@@ -45,14 +46,14 @@ def get_current_playing(token):
 
 def itunes_search(song, artist, album):
     '''
-    Check if iTunes has a higher definition album cover and
+    Check if other sources have higher definition album covers and
     return the url if found
     '''
 
-    # try coverpy with track + album + artist
+    # try coverpy with album + artist
     c = coverpy.CoverPy()
     try:
-        query = song + " " + album + " " + artist
+        query = album + " " + artist
         result = c.get_cover(query, 10)
         return result.artwork(10000)
     except (coverpy.exceptions.NoResultsException, requests.exceptions.HTTPError):
@@ -62,10 +63,16 @@ def itunes_search(song, artist, album):
     try:
         matches = itunespy.search_track(song)
     except LookupError:
-        return None
+        pass
     for match in matches:
         if match.artist_name == artist:
             return match.artwork_url_100.replace('100x100b', '10000x10000b')
+
+    # deezer
+    client = deezer.Client()
+    res = client.search(track=song, artist=artist, album=album)
+    if len(res) > 0:
+        return res[0].album.cover_xl
 
     return None
 
