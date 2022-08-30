@@ -50,14 +50,6 @@ def itunes_search(song, artist, album):
     return the url if found
     '''
 
-    # try coverpy with album + artist
-    c = coverpy.CoverPy()
-    try:
-        query = album + " " + artist
-        result = c.get_cover(query, 10)
-        return result.artwork(10000)
-    except (coverpy.exceptions.NoResultsException, requests.exceptions.HTTPError):
-        pass
 
     # try itunespy with track
     matches = None
@@ -66,9 +58,24 @@ def itunes_search(song, artist, album):
     except LookupError:
         pass
     if matches:
+        # direct match on album
         for match in matches:
-            if match.artist_name == artist:
+            if match.artist_name == artist and match.collectionName == album:
                 return match.artwork_url_100.replace('100x100b', '10000x10000b')
+
+        # fuzzy match on album
+        for match in matches:
+            if match.artist_name == artist and match.collectionName.startswith(album):
+                return match.artwork_url_100.replace('100x100b', '10000x10000b')
+
+    # try coverpy with album + artist
+    c = coverpy.CoverPy()
+    try:
+        query = album + " " + artist
+        result = c.get_cover(query, 10)
+        # return result.artwork(10000)
+    except (coverpy.exceptions.NoResultsException, requests.exceptions.HTTPError):
+        pass
 
     # deezer
     client = deezer.Client()
