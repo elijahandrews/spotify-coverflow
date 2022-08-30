@@ -60,13 +60,15 @@ def itunes_search(song, artist, album):
         pass
 
     # try itunespy with track
+    matches = None
     try:
         matches = itunespy.search_track(song)
     except LookupError:
         pass
-    for match in matches:
-        if match.artist_name == artist:
-            return match.artwork_url_100.replace('100x100b', '10000x10000b')
+    if matches:
+        for match in matches:
+            if match.artist_name == artist:
+                return match.artwork_url_100.replace('100x100b', '10000x10000b')
 
     # deezer
     client = deezer.Client()
